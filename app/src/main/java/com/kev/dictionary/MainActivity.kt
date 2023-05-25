@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,6 +29,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -84,20 +88,47 @@ class MainActivity : ComponentActivity() {
                             )
 
                             Spacer(modifier = Modifier.height(8.dp))
-                            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                                items(state.wordInfoItems.size) { i ->
-                                    val wordInfo = state.wordInfoItems[i]
+                            if (state.isLoading) {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    CircularProgressIndicator()
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Text(text = "Loading...")
+                                }
+                            }
 
-                                    /*The if statement below adds a bit of space below each word if there is more than one word*/
-                                    if (i > 0) {
-                                        Spacer(modifier = Modifier.height(8.dp))
-                                    }
+                            if (state.wordInfoItems.isNotEmpty()) {
+                                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                                    items(state.wordInfoItems.size) { i ->
+                                        val wordInfo = state.wordInfoItems[i]
 
-                                    WordInfoItem(wordInfo = wordInfo)
-                                    /* This checks if we're not at the last item, add a divider*/
-                                    if (1 < state.wordInfoItems.size - 1) {
-                                        Divider()
+                                        /*The if statement below adds a bit of space below each word if there is more than one word*/
+                                        if (i > 0) {
+                                            Spacer(modifier = Modifier.height(8.dp))
+                                        }
+
+                                        WordInfoItem(wordInfo = wordInfo)
+                                        /* This checks if we're not at the last item, add a divider*/
+                                        if (1 < state.wordInfoItems.size - 1) {
+                                            Divider()
+                                        }
                                     }
+                                }
+                            }
+
+                            // WHen no results are found
+                            if (!state.isLoading && state.wordInfoItems.isEmpty()) {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Icon(imageVector = Icons.Default.Warning, contentDescription = "Warning")
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Text(text = "No result(s) found")
                                 }
                             }
                         }
