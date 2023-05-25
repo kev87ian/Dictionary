@@ -2,6 +2,7 @@ package com.kev.dictionary.feature_dictionary.data.remote.dto
 
 
 import com.google.gson.annotations.SerializedName
+import com.kev.dictionary.feature_dictionary.data.local.entity.WordInfoEntity
 import com.kev.dictionary.feature_dictionary.domain.model.WordInfo
 
 data class WordInfoDTO(
@@ -12,8 +13,8 @@ data class WordInfoDTO(
     @SerializedName("word")
     val word: String
 ){
-    fun toWordInfo(): WordInfo{
-        return WordInfo(
+    fun toWordInfoEntity(): WordInfoEntity{
+        return WordInfoEntity(
             meanings = meanings.map { it.toMeaning() },
             phonetic = phonetic,
             word = word
