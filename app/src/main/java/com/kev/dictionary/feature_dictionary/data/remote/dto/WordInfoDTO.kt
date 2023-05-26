@@ -11,13 +11,16 @@ data class WordInfoDTO(
     @SerializedName("phonetic")
     val phonetic: String,
     @SerializedName("word")
-    val word: String
+    val word: String,
+    @SerializedName("phonetics")
+    val phonetics: List<PhoneticDTO>?
 ){
     fun toWordInfoEntity(): WordInfoEntity{
         return WordInfoEntity(
             meanings = meanings.map { it.toMeaning() },
             phonetic = phonetic,
-            word = word
+            word = word,
+            phonetics = phonetics?.map { it.toPhonetic() }
 
         )
     }

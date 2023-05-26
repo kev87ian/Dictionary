@@ -11,6 +11,7 @@ data class WordInfoEntity(
     val word: String,
     val phonetic: String,
     val meanings: List<Meaning>,
+    val phonetics: List<Phonetic>?,
     @PrimaryKey(autoGenerate = true)
     val id : Int? = null
 ){
@@ -18,7 +19,8 @@ data class WordInfoEntity(
         return WordInfo(
             meanings = meanings,
             word = word,
-            phonetic = phonetic
+            phonetic = phonetic,
+            phonetics = phonetics
         )
     }
 }

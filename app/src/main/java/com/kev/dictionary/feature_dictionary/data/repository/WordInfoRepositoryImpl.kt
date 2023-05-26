@@ -33,12 +33,23 @@ class WordInfoRepositoryImpl @Inject constructor(
             dao.insertWordInfos(remoteWordInfos.map { it.toWordInfoEntity() })
         } catch (e: HttpException) {
             e.printStackTrace()
-            emit(
+
+            if (e.code() == 404){
+                emit(Resource.Error(
+                    errorMessage = "No result(s) found",
+                    data = null
+                ))
+            }
+            else {
+                            emit(
                 Resource.Error(
                     "We're unable to reach servers, please retry.",
                     data = wordInfo
                 )
             )
+
+            }
+
         } catch (e: IOException) {
             e.printStackTrace()
             emit(

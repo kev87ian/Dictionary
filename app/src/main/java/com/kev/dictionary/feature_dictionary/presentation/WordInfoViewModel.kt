@@ -27,8 +27,8 @@ class WordInfoViewModel @Inject constructor(
     private val _state = mutableStateOf(WordInfoState())
     val state: State<WordInfoState> = _state
 
-    private val _eventFlow = MutableSharedFlow<UIEvent>()
-    val eventFlow = _eventFlow.asSharedFlow()
+  /*  private val _eventFlow = MutableSharedFlow<UIEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()*/
 
     private var searchJob: Job? = null
     fun onSearch(query: String) {
@@ -48,13 +48,14 @@ class WordInfoViewModel @Inject constructor(
                         is Resource.Error -> {
                             _state.value = state.value.copy(
                                 isLoading = false,
-                                wordInfoItems = result.data ?: emptyList()
+                                wordInfoItems = result.data ?: emptyList(),
+                                errorMessage = result.errorMessage
                             )
-                            _eventFlow.emit(
+                           /* _eventFlow.emit(
                                 UIEvent.ShowSnackbar(
                                     result.errorMessage
                                 )
-                            )
+                            )*/
                         }
                         is Resource.Success -> {
                             _state.value = state.value.copy(

@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
                 val state = viewModel.state.value
 
                 val snackbarHostState = remember { SnackbarHostState() }
-
+/*
                 LaunchedEffect(key1 = true) {
                     viewModel.eventFlow.collectLatest { event ->
                         when (event) {
@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-                }
+                }*/
 
                 Scaffold(
                     snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -119,16 +119,33 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
 
-                            // WHen no results are found
-                            if (!state.isLoading && state.wordInfoItems.isEmpty()) {
+                            if (state.errorMessage.contentEquals("No result(s) found") && state.wordInfoItems.isEmpty()){
                                 Column(
                                     modifier = Modifier.fillMaxSize(),
                                     verticalArrangement = Arrangement.Center,
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    Icon(imageVector = Icons.Default.Warning, contentDescription = "Warning")
+                                    Icon(
+                                        imageVector = Icons.Default.Warning,
+                                        contentDescription = "Warning"
+                                    )
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Text(text = "No result(s) found")
+                                }
+                            }
+
+                            if (!state.isLoading && state.errorMessage.isNotEmpty()) {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Warning,
+                                        contentDescription = "Warning"
+                                    )
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Text(text = state.errorMessage)
                                 }
                             }
                         }
